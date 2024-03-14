@@ -1,0 +1,36 @@
+from rest_framework import serializers
+
+from shop.models import Category, Brand, Product
+
+
+class ProductListSerializer(serializers.ModelSerializer):
+
+    brand = serializers.StringRelatedField(source="brand.title")
+    category = serializers.StringRelatedField(source="category.title")
+
+    class Meta:
+        model = Product
+        fields = (
+            'title',
+            'brand',
+            'category',
+            'price',
+            'image',
+        )
+
+
+class ProductDetailSerializer(serializers.ModelSerializer):
+    brand = serializers.StringRelatedField(source="brand.title")
+    category = serializers.StringRelatedField(source="category.title")
+
+    class Meta:
+        model = Product
+        fields = (
+            'title',
+            'brand',
+            'category',
+            'description',
+            'price',
+            'image',
+        )
+

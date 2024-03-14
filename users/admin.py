@@ -5,6 +5,7 @@ from django.contrib.auth import decorators, get_user_model
 from django.utils.translation import gettext_lazy as _
 
 from users.forms import UserAdminChangeForm, UserAdminCreationForm
+from users import models
 
 User = get_user_model()
 
@@ -37,3 +38,60 @@ class UserAdmin(auth_admin.UserAdmin):
     )
     list_display = ["username", "name", "is_superuser"]
     search_fields = ["name"]
+
+
+class CertificateInline(admin.TabularInline):
+    model = models.Certificate
+    extra = 0
+
+
+class OtherDetailInline(admin.TabularInline):
+    model = models.OtherDetail
+    extra = 0
+
+
+class ExperienceLetterInline(admin.TabularInline):
+    model = models.ExperienceLetter
+    extra = 0
+
+
+class AttachmentBusinessDocInline(admin.TabularInline):
+    model = models.AttachmentBusinessDoc
+    extra = 0
+
+
+@admin.register(models.Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(models.DoctorPersonalInfo)
+class DoctorPersonalInfoAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(models.DoctorDetail)
+class DoctorDetailAdmin(admin.ModelAdmin):
+    inlines = [CertificateInline, OtherDetailInline]
+
+
+@admin.register(models.DoctorExperience)
+class DoctorExperienceAdmin(admin.ModelAdmin):
+    inlines = [ExperienceLetterInline]
+
+
+@admin.register(models.SellerBusiness)
+class SellerBusinessAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(models.BankAttachment)
+class BankAttachmentAdmin(admin.ModelAdmin):
+    inlines = [AttachmentBusinessDocInline]
+
+
+@admin.register(models.BankDetail)
+class BankDetailAdmin(admin.ModelAdmin):
+    pass
+
+
