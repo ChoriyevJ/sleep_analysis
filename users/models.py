@@ -73,7 +73,7 @@ class Profile(BaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE,
                                 related_name='profile')
     image = models.ImageField(upload_to='images/profile/', blank=True, null=True)
-    phone = models.CharField(max_length=15)
+    phone = models.CharField(max_length=15, blank=True, null=True)
     dob = models.CharField(max_length=15, choices=DOBChoice.choices,
                            blank=True, null=True)
 
@@ -91,7 +91,7 @@ class Profile(BaseModel):
     is_premium = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.user
+        return self.user.username
 
 
 # Doctor profile models

@@ -83,7 +83,7 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "users",
-    "main.apps.MainConfig",
+    "order.apps.OrderConfig",
     "shop.apps.ShopConfig",
     # Your stuff: custom apps go here
 ]

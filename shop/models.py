@@ -1,7 +1,12 @@
+from decimal import Decimal
+
 from django.db import models
 from django.utils.text import slugify
 
 from utils.models import BaseModel
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class Category(BaseModel):
@@ -72,4 +77,22 @@ class Image(BaseModel):
     image = models.ImageField(upload_to='images/product/')
 
 
+class Cart(BaseModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
+                             related_name='carts')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE,
+                                related_name='carts')
+    quantity = models.PositiveSmallIntegerField(default=0)
+
+    objects = models.Manager()
+
+    class Meta:
+        unique_together = ('user', 'product')
+
+    @property
+    def get_total_price(self):
+        return self.quantity * self.product.price
+
+    def __str__(self):
+        return f'Cart(pk={self.pk})'
 

@@ -29,3 +29,6 @@ class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
 
 
+@admin.register(models.Cart)
+class CartAdmin(admin.ModelAdmin):
+    pass

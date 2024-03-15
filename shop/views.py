@@ -1,17 +1,15 @@
-from django.shortcuts import render
 from django.db import models
-from django.db.models import functions
-from rest_framework import generics, mixins
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework import generics
 
-from shop.models import Category, Brand, Product
+
+from shop.models import Product, Cart
 from shop import serializers
-from shop.cart import Cart
 
 
-class ProductListAPI(generics.ListAPIView, mixins.CreateModelMixin):
-    queryset = Product.objects.all()
+class ProductListAPI(generics.ListAPIView):
+    queryset = Product.objects.all().select_related(
+        "category", "brand"
+    ).prefetch_related("carts")
     serializer_class = serializers.ProductListSerializer
 
 
@@ -20,15 +18,37 @@ class ProductDetailAPI(generics.RetrieveAPIView):
     serializer_class = serializers.ProductListSerializer
 
 
-class CartAPI(APIView):
-
-    def get(self, request):
-        cart = Cart(request)
-
-        return Response(cart)
+class CartAPI(generics.ListAPIView):
+    queryset = Cart.objects.all()
+    serializer_class = serializers.CartSerializer
 
 
+class CartCreateAPI(generics.CreateAPIView):
+    queryset = Cart.objects.all()
+    serializer_class = serializers.CartCreateSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(profile=self.request.user.profile)
 
 
+class CartUpdateAPI(generics.UpdateAPIView):
+    queryset = Cart.objects.all()
+    serializer_class = serializers.CartCreateSerializer
+
+
+class CartDeleteAPI(generics.DestroyAPIView):
+    queryset = Cart.objects.all()
+    serializer_class = serializers.CartCreateSerializer
+
+
+class CheckOutAPI(generics.ListAPIView):
+    queryset = Cart.objects.all()
+    serializer_class = serializers
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(
+            user=self.request.user
+        )
 
 
