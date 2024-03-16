@@ -83,8 +83,8 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "users",
-    "order.apps.OrderConfig",
     "shop.apps.ShopConfig",
+    "order.apps.OrderConfig",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

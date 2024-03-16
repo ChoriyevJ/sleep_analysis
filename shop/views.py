@@ -1,7 +1,7 @@
 from django.db import models
 from rest_framework import generics
 
-
+from order.models import Order
 from shop.models import Product, Cart
 from shop import serializers
 
@@ -15,7 +15,7 @@ class ProductListAPI(generics.ListAPIView):
 
 class ProductDetailAPI(generics.RetrieveAPIView):
     queryset = Product.objects.all()
-    serializer_class = serializers.ProductListSerializer
+    serializer_class = serializers.ProductDetailSerializer
 
 
 class CartAPI(generics.ListAPIView):
@@ -28,27 +28,13 @@ class CartCreateAPI(generics.CreateAPIView):
     serializer_class = serializers.CartCreateSerializer
 
     def perform_create(self, serializer):
-        serializer.save(profile=self.request.user.profile)
+        serializer.save(user=self.request.user)
 
 
-class CartUpdateAPI(generics.UpdateAPIView):
+class CartDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = Cart.objects.all()
     serializer_class = serializers.CartCreateSerializer
 
 
-class CartDeleteAPI(generics.DestroyAPIView):
-    queryset = Cart.objects.all()
-    serializer_class = serializers.CartCreateSerializer
-
-
-class CheckOutAPI(generics.ListAPIView):
-    queryset = Cart.objects.all()
-    serializer_class = serializers
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        queryset = queryset.filter(
-            user=self.request.user
-        )
 
 

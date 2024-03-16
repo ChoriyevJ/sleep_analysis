@@ -1,4 +1,3 @@
-from decimal import Decimal
 
 from django.db import models
 from django.utils.text import slugify
@@ -89,10 +88,10 @@ class Cart(BaseModel):
     class Meta:
         unique_together = ('user', 'product')
 
-    @property
-    def get_total_price(self):
-        return self.quantity * self.product.price
-
     def __str__(self):
         return f'Cart(pk={self.pk})'
+
+    @property
+    def get_cost(self):
+        return self.quantity * self.product.price
 
